@@ -3,9 +3,9 @@ const { Schema }  =   mongoose;
 
 
 const LogSchema =  new Schema({
+    id_1:{ type: String, index: true, unique: true },
     file:{type: String},
-    index:{type: String,index: { unique: true }},
-    datetime: {type: Date},
+    date_: {type: Date},
     cuenta_origen: {type: String},
     pj_origen:{type: String},
     pj_origen: {type: String},

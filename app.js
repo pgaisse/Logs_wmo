@@ -6,7 +6,7 @@ const Logs    =   require('./models/Logs');
 require('./database');
 
 var  line="";  
-var watcher = chokidar.watch('./logs', {ignored: /^\./, persistent: true});
+var watcher = chokidar.watch('./logs', {ignored:[/^\./,'./app.js'] , persistent: true});
 
 
   watcher
@@ -22,9 +22,17 @@ var watcher = chokidar.watch('./logs', {ignored: /^\./, persistent: true});
     pat=path.toString();
     file=pat.replace('logs\\',"");
     date=pat.substr(5,10)
-    date=date.replace(".","-");
-    date=date.replace(".","-");
-    date=date.replace(".","-");
+    date=date.replace(".","");
+    date=date.replace(".","");
+    date=date.replace(".","");
+
+    dia=date.substr(0,2)
+    mes=date.substr(2,2)
+    year=date.substr(4,4)
+
+
+    //console.log("date : "+date )
+    //console.log("dia : "+dia,"mes : "+mes,"año : "+year )
     var reader = readline.createInterface({
       input: fs.createReadStream(path)
     }); 
@@ -157,14 +165,45 @@ var watcher = chokidar.watch('./logs', {ignored: /^\./, persistent: true});
           //"cuenta_destino: "+cuenta_destino, "pj_destino: "+pj_destino,"ip_destino: "+ip_destino, "trade_locate: "+trade_locate_destino, 
           //"Item:",item , "Serial: "+serial, "Nivel:"+nivel,"Luck:"+luck, "Skill:"+skill,"Opt:"+opt, "Ex:"+ex,"ACC:"+acc,"Harmony:"+harmony,"  "+count);
           //console.log(line, " ", count)
+            
+            hora=hora.replace(":","");
+            hora=hora.replace(":","");
+            hora=hora.replace(":","");
+
+            let hora_=hora.substr(0,2)
+            let minuto_=hora.substr(2,2)
+            let segundo_=hora.substr(4,2)
           
-          
-          
-         
-            index=count+"_"+file;
-            const newLog  =  new Logs({file,index:index ,datetime,cuenta_origen,pj_origen,pj_origen,ip_origen,trade_locate_origen,cuenta_destino, pj_destino,ip_destino,trade_locate_destino,item,serial,nivel,skill,opt,ex,acc,harmony});
+            fileindex=file;
+            fileindex=fileindex.replace(" ","");
+            fileindex=fileindex.replace(" ","");
+            fileindex=fileindex.replace(" ","");
+            fileindex=fileindex.replace(" ","");
+            fileindex=fileindex.replace("-","");
+            fileindex=fileindex.replace("_","");
+            fileindex=fileindex.replace("_","");
+            fileindex=fileindex.replace("_","");
+            fileindex=fileindex.replace("_","");
+            fileindex=fileindex.replace("_","");
+            fileindex=fileindex.replace("_","");
+            fileindex=fileindex.replace(".","");
+            fileindex=fileindex.replace(".","");
+            fileindex=fileindex.replace(".","");
+            fileindex=fileindex.replace(".","");
+            fileindex=fileindex.replace(".","");
+            fileindex=fileindex.replace(".","");
+
+            var id_1=count+fileindex;      
+            let date_= new Date(year,mes,dia,hora_,minuto_,segundo_);
+                   
+            query={file,id_1,date_,cuenta_origen,pj_origen,pj_origen,ip_origen,trade_locate_origen,cuenta_destino, pj_destino,ip_destino,trade_locate_destino,item,serial,nivel,skill,opt,ex,acc,harmony};
+            //console.log(query)
+            const newLog  =  new Logs(query);
+            //console.log(query)   
+            
             newLog.save(function(err){
               if(err){
+                console.log("Insert con error")
               }
               else{
                 console.log("Registro ingresado")
@@ -176,7 +215,7 @@ var watcher = chokidar.watch('./logs', {ignored: /^\./, persistent: true});
          
            
         }
-        datetime= new Date(date);
+        
         
           count++
       })
